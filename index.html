@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- 문자 인코딩 -->
+    <meta charset="UTF-8" />
+
+    <!-- 반응형 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 제목 -->
+    <title>이모티콘 분할기</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/header.css" />
+
+    <link rel="stylesheet" href="css/step1.css" />
+    <link rel="stylesheet" href="css/step2.css" />
+    <link rel="stylesheet" href="css/step3.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <!-- 앱 전체 -->
+    <div class="app">
+      <!-- Header -->
+      <header class="app-header">
+        <h1 class="site-title">이모티콘 분할기</h1>
+
+        <p class="site-desc">PNG 이미지를 42개의 이모티콘으로 분리합니다.</p>
+      </header>
+
+      <!-- 진행 단계 -->
+      <nav class="stepper">
+        <div class="step active" data-step="1">
+          <div class="step-circle">1</div>
+
+          <span>업로드</span>
+        </div>
+
+        <div class="step-line active"></div>
+
+        <div class="step" data-step="2">
+          <div class="step-circle">2</div>
+
+          <span>분리</span>
+        </div>
+
+        <div class="step-line active"></div>
+
+        <div class="step" data-step="3">
+          <div class="step-circle">3</div>
+
+          <span>다운로드</span>
+        </div>
+      </nav>
+
+      <!-- 메인 -->
+      <main class="main-content">
+        <!-- STEP 1 -->
+        <section id="step1" class="step-page active" data-step="1">
+          <div class="step-container">
+            <div class="upload-card">
+              <!-- 제목 -->
+              <h2 class="upload-title">이미지를 업로드하세요.</h2>
+
+              <!-- 가이드 다운로드 -->
+              <div class="guide-download">
+                <button id="downloadGuide" class="guide-button">
+                  📄 업로드용 가이드 다운로드
+                </button>
+              </div>
+
+              <p class="upload-desc">
+                가이드를 내려받아 작업한 후 완성된 PNG를 업로드하세요.
+              </p>
+
+              <!-- 업로드 영역 -->
+              <label for="fileInput" class="upload-zone">
+                <div class="upload-icon">🖼️</div>
+
+                <div class="upload-text">
+                  <strong> 파일을 선택하세요 </strong>
+
+                  <span> 클릭하거나 드래그하여 업로드 </span>
+                </div>
+              </label>
+
+              <!-- 숨겨진 파일 선택 -->
+              <input
+                id="fileInput"
+                type="file"
+                accept=".png,image/png"
+                hidden
+              />
+
+              <!-- 파일 정보 -->
+              <div class="file-info">
+                <p class="file-placeholder">선택된 파일이 없습니다.</p>
+
+                <div class="file-details" hidden>
+                  <p id="fileName"></p>
+
+                  <p id="fileSize"></p>
+
+                  <p id="fileType"></p>
+                </div>
+              </div>
+
+              <!-- 다음 버튼 -->
+              <button id="nextBtn" class="btn btn-orange next-button" disabled>
+                다음
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section id="step2" class="step-page" data-step="2">
+          <div class="step-container">
+            <div class="preview-card">
+              <h2>원본 이미지</h2>
+
+              <!-- 이미지 미리보기 -->
+              <div class="preview-area">
+                <!-- 이미지 -->
+                <img id="previewImage" alt="업로드한 이미지" />
+
+                <!-- 이미지가 없을 때 -->
+                <div id="previewPlaceholder" class="preview-placeholder">
+                  <div class="placeholder-icon">🖼️</div>
+
+                  <p>업로드한 이미지가 여기에 표시됩니다.</p>
+                </div>
+              </div>
+
+              <!-- 버튼 -->
+              <div class="step-buttons">
+                <button id="backToUpload" class="btn btn-light">이전</button>
+
+                <button id="splitBtn" class="btn btn-orange">
+                  이미지 분리
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section id="step3" class="step-page" data-step="3">
+          <div class="step-container">
+            <!-- 결과 카드 -->
+            <div class="result-card">
+              <!-- 상단 -->
+              <div class="result-header">
+                <div>
+                  <h2 class="result-title">분리된 이미지</h2>
+
+                  <p class="result-desc">
+                    이미지를 클릭하면 크게 볼 수 있습니다.
+                  </p>
+                </div>
+
+                <div id="pieceCount" class="piece-count">0 / 42</div>
+              </div>
+
+              <!-- 이미지 목록 -->
+              <div id="imageGrid" class="image-grid"></div>
+
+              <!-- 하단 버튼 -->
+              <div class="result-buttons">
+                <button id="downloadZip" class="btn btn-orange">
+                  ZIP 다운로드
+                </button>
+
+                <button id="downloadAll" class="btn btn-dark">
+                  PNG 다운로드
+                </button>
+
+                <button id="restartBtn" class="btn btn-light">처음으로</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <!-- IMAGE MODAL -->
+    <div id="imageModal" class="modal">
+      <div class="modal-content">
+        <button id="closeModal" class="modal-close">✕</button>
+
+        <img id="modalImage" class="modal-image" alt="분리된 이미지 확대보기" />
+      </div>
+    </div>
+    <!-- JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/canvas.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/step1.js"></script>
+    <script src="js/split.js"></script>
+    <script src="js/step2.js"></script>
+    <script src="js/step3.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/download.js"></script>
+    <script src="js/guide.js"></script>
+  </body>
+</html>
